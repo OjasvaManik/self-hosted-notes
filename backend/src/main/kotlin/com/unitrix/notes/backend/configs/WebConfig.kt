@@ -19,9 +19,9 @@ class WebConfig {
 					.allowedOrigins(
 						"http://localhost:3000",
 						"http://100.90.227.106:3000",
-						"https://lenovo.taildb46c9.ts.net:8441"
+						"https://lenovo.taildb46c9.ts.net"
 					)
-					.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+					.allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
 					.allowedHeaders("*")
 					.allowCredentials(true)
 			}
