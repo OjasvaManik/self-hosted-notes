@@ -5,6 +5,7 @@ export type Note = {
   content: string
   tags: string[]
   fileLocation?: string
+  imgUrl?: string
   emoji?: string
   isLocked: boolean
   isTrashed: boolean

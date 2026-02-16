@@ -290,6 +290,21 @@ export const updateTitleAction = async ( noteId: string, title: string ) => {
   return await res.json()
 }
 
+export const updateImgUrlAction = async ( noteId: string, imgUrl: string ) => {
+  const res = await fetch( `${ API_URL }/notes/img-url`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify( { id: noteId, imgUrl } ),
+  } )
+
+  if ( !res.ok ) {
+    throw new Error( "Failed to update Image" )
+  }
+
+  revalidatePath( `/note/${ noteId }` )
+  return await res.json()
+}
+
 export const updateEmojiAction = async ( noteId: string, emoji: string ) => {
   const res = await fetch( `${ API_URL }/notes/emoji`, {
     method: "PATCH",

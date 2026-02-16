@@ -14,6 +14,7 @@ fun NoteEntity.toDto() = GetNoteResponse(
 	fileLocation = this.fileLocation?.let {
 		"/uploads/images/${File(it).name}"
 	},
+	imgUrl = this.imgUrl,
 	emoji = this.emoji,
 	isLocked = this.isLocked,
 	isTrashed = this.isTrashed,

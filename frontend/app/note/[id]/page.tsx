@@ -32,6 +32,7 @@ const NotePage = async ( { params }: Props ) => {
     <div>
       <Banner
         fileLocation={ note.fileLocation }
+        imgUrl={ note?.imgUrl }
         noteId={ id }
         isLocked={ note.isLocked }
         isPinned={ note.isPinned }

@@ -102,6 +102,14 @@ class NoteController(
 		return ResponseEntity.ok(updatedNote.toDto())
 	}
 
+	@PatchMapping("/img-url")
+	fun updateImgUrl(@RequestBody request: UpdateNoteRequest): ResponseEntity<GetNoteResponse> {
+		val imgUrl = request.imgUrl ?: return ResponseEntity.badRequest().build()
+
+		val updatedNote = noteService.updateNoteImgUrl(request.id, imgUrl)
+		return ResponseEntity.ok(updatedNote.toDto())
+	}
+
 	@PatchMapping("/tags")
 	fun updateTags(@RequestBody request: UpdateNoteRequest): ResponseEntity<GetNoteResponse> {
 		val tags = request.tags ?: return ResponseEntity.badRequest().build()

@@ -144,6 +144,16 @@ class NoteService(
 		return noteRepo.save(note)
 	}
 
+	fun updateNoteImgUrl(id: UUID, imgUrl: String): NoteEntity {
+		val note = noteRepo.findById(id)
+			.orElseThrow { RuntimeException("Note not found") }
+		if (note.fileLocation != null) {
+			throw IllegalStateException("Note already has an image")
+		}
+		note.imgUrl = imgUrl
+		return noteRepo.save(note)
+	}
+
 	fun changePinStatus(id: UUID): Boolean {
 		val note = noteRepo.findById(id).orElse(null) ?: return false
 		note.isPinned = !note.isPinned

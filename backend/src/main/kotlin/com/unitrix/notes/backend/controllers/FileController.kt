@@ -20,6 +20,14 @@ class FileController(
 		@RequestParam("file") file: MultipartFile,
 		@RequestParam("noteId") noteId: UUID
 	): ResponseEntity<Map<String, String>> {
+		val note = noteService.getNote(noteId)
+			?: return ResponseEntity.notFound().build()
+
+		if (note.imgUrl != null) {
+			return ResponseEntity.badRequest()
+				.body(mapOf("error" to "Note already has an image"))
+		}
+
 		val contentType = file.contentType
 			?: return ResponseEntity.badRequest()
 				.body(mapOf("error" to "Missing content type"))
@@ -30,9 +38,6 @@ class FileController(
 			return ResponseEntity.badRequest()
 				.body(mapOf("error" to "Unsupported file type"))
 		}
-
-		val note = noteService.getNote(noteId)
-			?: return ResponseEntity.notFound().build()
 
 		val oldPath = note.fileLocation
 		val tempFile = File.createTempFile("upload-", file.originalFilename)

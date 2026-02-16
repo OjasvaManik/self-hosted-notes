@@ -31,6 +31,9 @@ class NoteEntity(
 	@Column(name = "file_location")
 	var fileLocation: String? = null,
 
+	@Column(name = "img_url")
+	var imgUrl: String? = null,
+
 	@Column(name = "emoji")
 	var emoji: String? = null,
 
