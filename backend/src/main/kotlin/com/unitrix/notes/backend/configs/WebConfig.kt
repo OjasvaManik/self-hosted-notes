@@ -32,7 +32,7 @@ class WebConfig(
 			override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
 
 				val uploadPath = Paths
-					.get(storagePath)
+					.get("$storagePath/images")
 					.toAbsolutePath()
 					.toUri()
 					.toString()
