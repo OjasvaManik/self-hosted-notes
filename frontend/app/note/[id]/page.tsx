@@ -3,6 +3,10 @@ import { Note } from "@/types/types";
 import { getNoteAction } from "@/actions/actions";
 import { notFound } from "next/navigation";
 import TitleBar from "@/components/notes/title-bar";
+import Banner from "@/components/notes/banner";
+import NoteTagsList from "@/components/notes/note-tags-list";
+import AddTagsToNote from "@/components/notes/add-tags-to-note";
+import NoteEmojiPicker from "@/components/notes/note-emoji-picker";
 
 type Props = {
   params: Promise<{
@@ -21,15 +25,18 @@ const NotePage = async ( { params }: Props ) => {
 
   return (
     <div>
-
-      {/*<div className={ 'h-72 bg-secondary shadow-md' }>*/ }
-
-      {/*</div>*/ }
+      <Banner fileLocation={ note?.fileLocation } noteId={ id }/>
       <div className={ 'flex justify-start items-center px-3 py-2 space-x-2 w-fit' }>
-        <div className="h-14 w-16 lg:w-14 bg-primary rounded-full shadow-md">
-
+        <NoteEmojiPicker noteId={ id } currentEmoji={ note.emoji }/>
+        <TitleBar title={ note.title } noteId={ id }/>
+        <div className={ 'hidden lg:flex flex-col justify-center' }>
+          <AddTagsToNote id={ note?.id } currentTags={ note?.tags }/>
+          <NoteTagsList tags={ note?.tags } noteId={ note.id }/>
         </div>
-        <TitleBar title={ note.title }/>
+      </div>
+      <div className={ 'lg:hidden' }>
+        <AddTagsToNote id={ note?.id } currentTags={ note?.tags }/>
+        <NoteTagsList tags={ note?.tags } noteId={ note.id }/>
       </div>
     </div>
   );

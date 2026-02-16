@@ -69,6 +69,42 @@ class NoteController(
 		return ResponseEntity.ok(UpdateNoteResponse(updatedNote))
 	}
 
+	@PatchMapping("/title")
+	fun updateTitle(@RequestBody request: UpdateNoteRequest): ResponseEntity<GetNoteResponse> {
+		val title = request.title ?: return ResponseEntity.badRequest().build()
+
+		val updatedNote = noteService.updateNoteTitle(request.id, title)
+			?: return ResponseEntity.notFound().build()
+		return ResponseEntity.ok(updatedNote.toDto())
+	}
+
+	@PatchMapping("/emoji")
+	fun updateEmoji(@RequestBody request: UpdateNoteRequest): ResponseEntity<GetNoteResponse> {
+		val emoji = request.emoji ?: return ResponseEntity.badRequest().build()
+
+		val updatedNote = noteService.updateNoteEmoji(request.id, emoji)
+			?: return ResponseEntity.notFound().build()
+		return ResponseEntity.ok(updatedNote.toDto())
+	}
+
+	@PatchMapping("/content")
+	fun updateContent(@RequestBody request: UpdateNoteRequest): ResponseEntity<GetNoteResponse> {
+		val content = request.content ?: return ResponseEntity.badRequest().build()
+
+		val updatedNote = noteService.updateNoteContent(request.id, content)
+			?: return ResponseEntity.notFound().build()
+		return ResponseEntity.ok(updatedNote.toDto())
+	}
+
+	@PatchMapping("/tags")
+	fun updateTags(@RequestBody request: UpdateNoteRequest): ResponseEntity<GetNoteResponse> {
+		val tags = request.tags ?: return ResponseEntity.badRequest().build()
+
+		val updatedNote = noteService.updateNoteTags(request.id, tags)
+			?: return ResponseEntity.notFound().build()
+		return ResponseEntity.ok(updatedNote.toDto())
+	}
+
 	@PatchMapping("/pin")
 	fun changePinStatus(@RequestBody request: ChangeStatusRequest): ResponseEntity<Boolean> {
 		return ResponseEntity.ok(noteService.changePinStatus(request.id))

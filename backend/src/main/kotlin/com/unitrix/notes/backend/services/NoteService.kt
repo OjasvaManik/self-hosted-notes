@@ -19,9 +19,14 @@ import java.util.*
 class NoteService(
 	private val noteRepo: NoteRepo,
 	private val tagRepo: TagRepo,
+	private val fileService: FileService,
 	@Value("\${app.lock.password}")
-	private val lockPassword: String
+	private val lockPassword: String,
 ) {
+
+	fun save(note: NoteEntity) {
+		noteRepo.save(note)
+	}
 
 	fun createNote(): UUID {
 		val note = NoteEntity(
@@ -78,7 +83,7 @@ class NoteService(
 	}
 
 	fun getAllNotesForSearch(): List<NoteEntity> {
-		return noteRepo.findAll()
+		return noteRepo.findAllByIsLockedFalseAndIsTrashedFalse()
 	}
 
 	fun getTrashedNotes() = noteRepo.findAllByIsTrashed(true).orEmpty()
@@ -106,6 +111,35 @@ class NoteService(
 		return true
 	}
 
+	fun updateNoteTitle(id: UUID, title: String): NoteEntity? {
+		val note = noteRepo.findById(id).orElse(null) ?: return null
+		note.title = title
+		return noteRepo.save(note)
+	}
+
+	fun updateNoteEmoji(id: UUID, emoji: String): NoteEntity? {
+		val note = noteRepo.findById(id).orElse(null) ?: return null
+		note.emoji = emoji
+		return noteRepo.save(note)
+	}
+
+	fun updateNoteContent(id: UUID, content: String): NoteEntity? {
+		val note = noteRepo.findById(id).orElse(null) ?: return null
+		note.content = content
+		return noteRepo.save(note)
+	}
+
+	fun updateNoteTags(id: UUID, tags: List<String>): NoteEntity? {
+		val note = noteRepo.findById(id).orElse(null) ?: return null
+
+		note.tags = tags.map { tagName ->
+			val cleanName = tagName.trim().lowercase()
+			tagRepo.findById(cleanName).orElseGet { TagEntity(cleanName) }
+		}.toMutableSet()
+
+		return noteRepo.save(note)
+	}
+
 	fun changePinStatus(id: UUID): Boolean {
 		val note = noteRepo.findById(id).orElse(null) ?: return false
 		note.isPinned = !note.isPinned
@@ -129,6 +163,7 @@ class NoteService(
 
 	fun deleteNote(id: UUID): Boolean {
 		try {
+			noteRepo.findById(id).orElseThrow().fileLocation?.let { fileService.deleteFile(it) }
 			noteRepo.deleteById(id)
 			return true
 		} catch (e: Exception) {

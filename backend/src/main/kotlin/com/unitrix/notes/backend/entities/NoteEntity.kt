@@ -29,10 +29,10 @@ class NoteEntity(
 	var tags: MutableSet<TagEntity> = mutableSetOf(),
 
 	@Column(name = "file_location")
-	val fileLocation: String? = null,
+	var fileLocation: String? = null,
 
 	@Column(name = "emoji")
-	val emoji: String? = null,
+	var emoji: String? = null,
 
 	@Column(name = "is_locked")
 	var isLocked: Boolean = false,
@@ -48,4 +48,5 @@ class NoteEntity(
 interface NoteRepo : JpaRepository<NoteEntity, UUID>, JpaSpecificationExecutor<NoteEntity> {
 	fun findAllByIsTrashed(isTrashed: Boolean): List<NoteEntity>
 	fun findAllByIsLocked(isLocked: Boolean): List<NoteEntity>
+	fun findAllByIsLockedFalseAndIsTrashedFalse(): List<NoteEntity>
 }

@@ -45,6 +45,7 @@ data class UpdateNoteRequest(
 	val id: UUID,
 	val title: String?,
 	val content: String?,
+	val emoji: String?,
 	val tags: List<String>?,
 	val isPinned: Boolean?,
 	val isLocked: Boolean?,

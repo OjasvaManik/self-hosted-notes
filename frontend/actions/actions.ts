@@ -254,3 +254,77 @@ export const accessLockedNotesWithPasswordAction = async ( password: string ) =>
   return text === "true";
 };
 
+export async function deleteFileAction( noteId: string ) {
+  const res = await fetch( `${ API_URL }/files/delete`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify( noteId ),
+  } )
+
+  if ( !res.ok ) {
+    throw new Error( "Failed to delete file" )
+  }
+
+  revalidatePath( `/note/${ noteId }` )
+  return await res.json()
+}
+
+export const updateTitleAction = async ( noteId: string, title: string ) => {
+  const res = await fetch( `${ API_URL }/notes/title`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify( { id: noteId, title } ),
+  } )
+
+  if ( !res.ok ) {
+    throw new Error( "Failed to update title" )
+  }
+
+  revalidatePath( `/note/${ noteId }` )
+  return await res.json()
+}
+
+export const updateEmojiAction = async ( noteId: string, emoji: string ) => {
+  const res = await fetch( `${ API_URL }/notes/emoji`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify( { id: noteId, emoji } ),
+  } )
+
+  if ( !res.ok ) {
+    throw new Error( "Failed to update emoji" )
+  }
+
+  revalidatePath( `/note/${ noteId }` )
+  return await res.json()
+}
+
+export const updateContentAction = async ( noteId: string, content: string ) => {
+  const res = await fetch( `${ API_URL }/notes/content`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify( { id: noteId, content } ),
+  } )
+
+  if ( !res.ok ) {
+    throw new Error( "Failed to update content" )
+  }
+
+  revalidatePath( `/note/${ noteId }` )
+  return await res.json()
+}
+
+export const updateTagsAction = async ( noteId: string, tags: string[] ) => {
+  const res = await fetch( `${ API_URL }/notes/tags`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify( { id: noteId, tags } ),
+  } )
+
+  if ( !res.ok ) {
+    throw new Error( "Failed to update tags" )
+  }
+
+  revalidatePath( `/note/${ noteId }` )
+  return await res.json()
+}
