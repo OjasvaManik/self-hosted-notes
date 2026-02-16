@@ -7,6 +7,7 @@ import Banner from "@/components/notes/banner";
 import NoteTagsList from "@/components/notes/note-tags-list";
 import AddTagsToNote from "@/components/notes/add-tags-to-note";
 import NoteEmojiPicker from "@/components/notes/note-emoji-picker";
+import { Editor } from "@/components/notes/dynamic-editor";
 
 type Props = {
   params: Promise<{
@@ -18,6 +19,10 @@ const NotePage = async ( { params }: Props ) => {
   const { id } = await params;
 
   const note: Note | null = await getNoteAction( id );
+  const parsedContent = note?.content
+    ? JSON.parse( note.content )
+    : undefined
+
 
   if ( !note ) {
     notFound();
@@ -43,6 +48,7 @@ const NotePage = async ( { params }: Props ) => {
         <AddTagsToNote id={ note?.id } currentTags={ note?.tags }/>
         <NoteTagsList tags={ note?.tags } noteId={ note.id }/>
       </div>
+      <Editor noteId={ note.id } initialContent={ parsedContent }/>
     </div>
   );
 };
