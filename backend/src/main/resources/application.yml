@@ -22,6 +22,6 @@ spring:
 app:
   file:
     storage:
-      path: ${APP_FILE_STORAGE_PATH:/tmp/uploads}
+      path: /home/ojasva/Prod/self-hosted-notes/data/uploads
   lock:
     password: ${LOCK_PASSWORD:finalXV}

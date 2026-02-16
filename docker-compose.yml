@@ -3,43 +3,11 @@ services:
     image: postgres:16-alpine
     container_name: note-db
     restart: always
+    ports:                 # <--- ADD THIS BLOCK
+      - "5432:5432"        # <--- Maps host:5432 to container:5432
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASS}
       POSTGRES_DB: ${DB_NAME}
     volumes:
       - ./data/db:/var/lib/postgresql/data
-    networks:
-      - web_net
-
-  backend:
-    build: ./backend
-    container_name: note-backend
-    restart: on-failure
-    depends_on:
-      - db
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME}
-      SPRING_DATASOURCE_USERNAME: ${DB_USER}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASS}
-      APP_FILE_STORAGE_PATH: /app/uploads
-    volumes:
-      - ./data/uploads:/app/uploads
-    networks:
-      - web_net
-
-  frontend:
-    build: ./frontend
-    container_name: note-frontend
-    restart: on-failure
-    depends_on:
-      - backend
-    environment:
-      INTERNAL_API_URL: http://note-backend:8080
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
-    networks:
-      - web_net
-
-networks:
-  web_net:
-    external: true
