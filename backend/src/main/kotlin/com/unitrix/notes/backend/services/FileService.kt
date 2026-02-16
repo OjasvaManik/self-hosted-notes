@@ -1,5 +1,6 @@
 package com.unitrix.notes.backend.services
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.File
 import java.nio.file.Files
@@ -8,10 +9,11 @@ import java.nio.file.Paths
 import java.util.*
 
 @Service
-class FileService {
+class FileService(
+	@Value("\${app.file.storage.path}") private val storagePath: String
+) {
 
-	private val baseDir: Path =
-		Paths.get("/home/ojasva/Projects/notes-app/data/uploads")
+	private val baseDir: Path = Paths.get(storagePath)
 
 	private val imagesDir: Path = baseDir.resolve("images")
 	private val tempDir: Path = baseDir.resolve("temp")
