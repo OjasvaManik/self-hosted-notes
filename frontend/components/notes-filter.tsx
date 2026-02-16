@@ -27,7 +27,15 @@ export const NotesFilter = ( { tags }: Props ) => {
 
   const handleSortChange = ( val: string ) => {
     const params = new URLSearchParams( searchParams.toString() )
-    params.set( 'sortDir', val.toUpperCase() )
+
+    if ( val.startsWith( "title_" ) ) {
+      params.set( "sortBy", "title" )
+      params.set( "sortDir", val.split( "_" )[ 1 ].toUpperCase() )
+    } else {
+      params.set( "sortBy", "updatedAt" )
+      params.set( "sortDir", val.toUpperCase() )
+    }
+
     router.push( `?${ params.toString() }` )
   }
 
@@ -62,8 +70,16 @@ export const NotesFilter = ( { tags }: Props ) => {
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Order</SelectLabel>
-            <SelectItem value="asc">Oldest First</SelectItem>
             <SelectItem value="desc">Newest First</SelectItem>
+            <SelectItem value="asc">Oldest First</SelectItem>
+          </SelectGroup>
+
+          <SelectSeparator/>
+
+          <SelectGroup>
+            <SelectLabel>Alphabetical</SelectLabel>
+            <SelectItem value="title_asc">A → Z</SelectItem>
+            <SelectItem value="title_desc">Z → A</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

@@ -5,6 +5,7 @@ import EmojiPicker, { EmojiClickData } from "emoji-picker-react"
 import { updateEmojiAction } from "@/actions/actions"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button";
+import { PlusIcon } from "lucide-react";
 
 type Props = {
   noteId: string
@@ -38,7 +39,7 @@ const NoteEmojiPicker = ( { noteId, currentEmoji }: Props ) => {
         disabled={ isPending }
         className="h-14 w-14 flex items-center justify-center text-3xl bg-secondary rounded-full shadow-md hover:scale-105 transition"
       >
-        { emoji || "🙂" }
+        { emoji || <PlusIcon/> }
       </Button>
 
       { open && (

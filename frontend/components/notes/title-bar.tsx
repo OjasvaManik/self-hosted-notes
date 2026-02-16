@@ -19,6 +19,10 @@ const TitleBar = ( { title, noteId }: Props ) => {
 
     startTransition( async () => {
       try {
+        if ( newTitle.trim() === "" ) {
+          toast.error( "Title cannot be empty" )
+          return
+        }
         await updateTitleAction( noteId, newTitle )
         toast.success( "Title updated" )
       } catch ( error ) {

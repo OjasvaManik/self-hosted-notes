@@ -1,5 +1,5 @@
 import NavBar from "@/components/nav-bar";
-import { getNoteTitleAction } from "@/actions/actions";
+import { getNoteEmojiAction, getNoteTitleAction } from "@/actions/actions";
 import React from "react";
 
 export default async function NoteLayout( {
@@ -13,10 +13,11 @@ export default async function NoteLayout( {
   const { id } = await params;
 
   const title = await getNoteTitleAction( id );
+  const emoji = await getNoteEmojiAction( id );
 
   return (
     <>
-      <NavBar title={ title }/>
+      <NavBar title={ title } emoji={ emoji }/>
       { children }
     </>
   );

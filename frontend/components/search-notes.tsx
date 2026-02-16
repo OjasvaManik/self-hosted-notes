@@ -40,12 +40,13 @@ const SearchNotes = () => {
               <CommandEmpty>No results found.</CommandEmpty>
               { notes.map( ( note ) => (
                 <CommandItem key={ note.id } value={ note.title }
-                             className={ 'px-3 py-1 rounded-xl flex items-center justify-between gap-2 hover:bg-sidebar/50 transition-all' }
+                             className={ 'px-3 py-1 rounded-xl flex items-center justify-start gap-2 hover:bg-sidebar/50 transition-all' }
                              onSelect={ () => {
                                setOpen( false )
                                router.push( `/note/${ note.id }` )
                              } }
                 >
+                  <span className={ 'truncate' }>{ note.emoji }</span>
                   <span className={ 'truncate' }>{ note.title }</span>
                 </CommandItem>
               ) ) }

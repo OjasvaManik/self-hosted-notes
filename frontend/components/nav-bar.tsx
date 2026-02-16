@@ -6,9 +6,10 @@ import Link from "next/link";
 interface NavBarProps {
   title?: string;
   className?: string;
+  emoji?: string;
 }
 
-const NavBar = ( { title, className }: NavBarProps ) => {
+const NavBar = ( { title, className, emoji }: NavBarProps ) => {
   return (
     <div className="flex items-center px-3 py-2 shadow-md">
 
@@ -21,8 +22,8 @@ const NavBar = ( { title, className }: NavBarProps ) => {
       </div>
 
       {/* Middle: Title */ }
-      <div className={ cn( "flex-1 text-center text-sm truncate px-4 mr-24", className ) }>
-        { title }
+      <div className={ cn( "flex-1 text-center text-md truncate px-4 mr-24", className ) }>
+        { emoji } { title }
       </div>
 
       {/* Right: Theme Toggle */ }

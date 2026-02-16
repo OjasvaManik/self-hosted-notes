@@ -63,6 +63,12 @@ class NoteController(
 		return ResponseEntity.ok(title)
 	}
 
+	@GetMapping("/emoji/{id}")
+	fun getNoteEmoji(@PathVariable id: UUID): ResponseEntity<String> {
+		val emoji = noteService.getNoteEmoji(id)
+		return ResponseEntity.ok(emoji)
+	}
+
 	@PatchMapping("/update")
 	fun updateNote(@RequestBody note: UpdateNoteRequest): ResponseEntity<UpdateNoteResponse> {
 		val updatedNote = noteService.updateNote(note.id, note.title, note.content, note.tags)

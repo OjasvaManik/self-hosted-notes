@@ -1,13 +1,16 @@
 import Image from "next/image"
 import UploadFile from "@/components/notes/upload-file"
 import RemoveFile from "@/components/notes/remove-file"
+import NotePageButtons from "@/components/notes/note-page-buttons";
 
 type Props = {
   fileLocation?: string | null
   noteId: string
+  isLocked: boolean
+  isPinned: boolean
 }
 
-const Banner = ( { fileLocation, noteId }: Props ) => {
+const Banner = ( { fileLocation, noteId, isPinned, isLocked }: Props ) => {
   const baseUrl = process.env.NEXT_PUBLIC_IMAGE_API_URL
 
   if ( !fileLocation ) {
@@ -34,6 +37,14 @@ const Banner = ( { fileLocation, noteId }: Props ) => {
         className="absolute right-4 top-4 z-10 flex gap-2 lg:opacity-0 transition-opacity duration-200 group-hover:opacity-100">
         <UploadFile noteId={ noteId }/>
         <RemoveFile noteId={ noteId }/>
+      </div>
+
+      <div className="absolute left-4 top-4 z-10 flex gap-2">
+        <NotePageButtons
+          noteId={ noteId }
+          isLocked={ isLocked }
+          isPinned={ isPinned }
+        />
       </div>
     </div>
   )

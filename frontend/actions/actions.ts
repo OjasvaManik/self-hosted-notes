@@ -181,6 +181,12 @@ export const getNoteTitleAction = async ( id: String ) => {
   return await res.text()
 }
 
+export const getNoteEmojiAction = async ( id: String ) => {
+  const res = await fetch( `${ API_URL }/notes/emoji/${ id }`, { cache: "no-store" } )
+  if ( !res.ok ) return ""
+  return await res.text()
+}
+
 export const deleteNoteAction = async ( noteId: string ) => {
   const res = await fetch( `${ API_URL }/notes/delete`, {
     method: "DELETE",

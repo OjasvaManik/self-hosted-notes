@@ -25,7 +25,12 @@ const NotePage = async ( { params }: Props ) => {
 
   return (
     <div>
-      <Banner fileLocation={ note?.fileLocation } noteId={ id }/>
+      <Banner
+        fileLocation={ note.fileLocation }
+        noteId={ id }
+        isLocked={ note.isLocked }
+        isPinned={ note.isPinned }
+      />
       <div className={ 'flex justify-start items-center px-3 py-2 space-x-2 w-fit' }>
         <NoteEmojiPicker noteId={ id } currentEmoji={ note.emoji }/>
         <TitleBar title={ note.title } noteId={ id }/>

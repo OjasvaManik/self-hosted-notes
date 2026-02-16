@@ -94,6 +94,10 @@ class NoteService(
 		return noteRepo.findById(id).map { it.title }.orElse(null)
 	}
 
+	fun getNoteEmoji(id: UUID): String? {
+		return noteRepo.findById(id).map { it.emoji }.orElse(null)
+	}
+
 	fun updateNote(id: UUID, title: String?, content: String?, tags: List<String>?): Boolean {
 		val note = noteRepo.findById(id).orElse(null) ?: return false
 

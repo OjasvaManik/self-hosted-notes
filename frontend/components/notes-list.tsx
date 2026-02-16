@@ -4,17 +4,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import Image from "next/image"
 import { Note } from "@/types/types"
-import {
-  changeLockStatusAction,
-  changePinStatusAction,
-  changeTrashStatusAction,
-  getAllNotesAction
-} from "@/actions/actions"
-import { Button } from "@/components/ui/button"
-import { Loader2, Lock, LockOpen, Pin, PinOff, TrashIcon } from "lucide-react"
-
-import { toast } from "sonner"
+import { getAllNotesAction } from "@/actions/actions"
+import { Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils";
+import NoteButtons from "@/components/notes/note-buttons";
 
 const PAGE_SIZE = 15
 
@@ -38,7 +31,7 @@ const NotesList = () => {
       const actionParams: Record<string, string> = {}
       actionParams[ 'page' ] = pageToFetch.toString()
       actionParams[ 'size' ] = PAGE_SIZE.toString()
-      actionParams[ 'sortBy' ] = 'updatedAt'
+      actionParams[ 'sortBy' ] = searchParams.get( 'sortBy' ) || 'updatedAt'
       actionParams[ 'direction' ] = ( searchParams.get( 'sortDir' ) || 'DESC' ).toUpperCase()
 
       const filterVal = searchParams.get( 'filter' )
@@ -88,48 +81,6 @@ const NotesList = () => {
     }
   }, [ observerTarget, hasMore, loading, page, fetchNotes ] )
 
-  const handlePin = async ( e: React.MouseEvent, noteId: string ) => {
-    e.stopPropagation()
-    setNotes( prev => prev.map( n => n.id === noteId ? { ...n, isPinned: !n.isPinned } : n ) )
-    try {
-      await changePinStatusAction( noteId )
-      toast.success( "Pin status changed" )
-    } catch ( error ) {
-      console.error( "Failed to pin note", error )
-      setNotes( prev => prev.map( n => n.id === noteId ? { ...n, isPinned: !n.isPinned } : n ) )
-    }
-  }
-
-  const handleLock = async ( e: React.MouseEvent, noteId: string ) => {
-    e.stopPropagation()
-    setNotes( prev => prev.map( n => n.id === noteId ? { ...n, isLocked: !n.isLocked } : n ) )
-    if ( params.id === noteId ) {
-      router.push( "/" )
-    }
-    try {
-      await changeLockStatusAction( noteId )
-      toast.success( "Note Locked" )
-    } catch ( error ) {
-      console.error( "Failed to lock note", error )
-      setNotes( prev => prev.map( n => n.id === noteId ? { ...n, isLocked: !n.isLocked } : n ) )
-    }
-  }
-
-  const handleTrash = async ( e: React.MouseEvent, noteId: string ) => {
-    e.stopPropagation()
-    setNotes( prev => prev.filter( n => n.id !== noteId ) )
-    if ( params.id === noteId ) {
-      router.push( "/" )
-    }
-    try {
-      await changeTrashStatusAction( noteId )
-      toast.success( "Note Trashed" )
-    } catch ( error ) {
-      console.error( "Failed to trash note", error )
-      fetchNotes( page, true )
-    }
-  }
-
   const displayedNotes = notes
     .filter( note => !note.isTrashed && !note.isLocked )
     .sort( ( a, b ) => ( a.isPinned === b.isPinned ? 0 : a.isPinned ? -1 : 1 ) )
@@ -156,11 +107,11 @@ const NotesList = () => {
             </div>
           ) }
 
-          <div className="relative z-10 flex flex-col justify-between h-full min-h-18">
+          <div className="relative z-10 flex flex-col justify-between h-full">
             <div className="flex justify-between items-start w-full">
               <div className={ 'flex justify-start items-center space-x-1' }>
-                <p>{ note.emoji }</p>
-                <p className='font-semibold text-base truncate pr-2 max-w-[80%]'>{ note.title }</p>
+                <p className={ 'text-[16px]' }>{ note.emoji }</p>
+                <p className='font-semibold text-base truncate pr-2 max-w-64'>{ note.title }</p>
               </div>
               { note.isPinned && <span
                   className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium shadow-sm">Pinned</span> }
@@ -179,34 +130,7 @@ const NotesList = () => {
                   { note.updatedAt ? new Date( note.updatedAt ).toLocaleDateString() : '—' }
                 </span>
 
-                <div className="flex gap-1">
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="h-6 w-6 hover:bg-background/80"
-                    onClick={ ( e ) => handleLock( e, note.id ) }
-                  >
-                    { note.isLocked ? <Lock className="w-3 h-3 text-red-500"/> : <LockOpen className="w-3 h-3"/> }
-                  </Button>
-
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="h-6 w-6 hover:bg-background/80"
-                    onClick={ ( e ) => handlePin( e, note.id ) }
-                  >
-                    { note.isPinned ? <PinOff className="w-3 h-3 text-primary"/> : <Pin className="w-3 h-3"/> }
-                  </Button>
-
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="h-6 w-6 hover:text-destructive hover:bg-background/80"
-                    onClick={ ( e ) => handleTrash( e, note.id ) }
-                  >
-                    <TrashIcon className="w-3 h-3"/>
-                  </Button>
-                </div>
+                <NoteButtons note={ note } setNotes={ setNotes }/>
               </div>
             </div>
           </div>
