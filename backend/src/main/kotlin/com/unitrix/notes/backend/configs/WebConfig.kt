@@ -1,5 +1,6 @@
 package com.unitrix.notes.backend.configs
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.CorsRegistry
@@ -8,7 +9,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import java.nio.file.Paths
 
 @Configuration
-class WebConfig {
+class WebConfig(
+	@Value("\${app.file.storage.path}") private val storagePath: String
+) {
 
 	@Bean
 	fun corsConfigurer(): WebMvcConfigurer {
@@ -29,7 +32,7 @@ class WebConfig {
 			override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
 
 				val uploadPath = Paths
-					.get("/home/ojasva/Projects/notes-app/data/uploads/images")
+					.get(storagePath)
 					.toAbsolutePath()
 					.toUri()
 					.toString()
