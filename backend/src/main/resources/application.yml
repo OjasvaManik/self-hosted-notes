@@ -22,7 +22,7 @@ spring:
 app:
   file:
     storage:
-      #      path: /home/ojasva/Prod/self-hosted-notes/data/uploads
-      path: /home/ojasva/Projects/notes-app/data/uploads
+      path: /home/ojasva/Prod/self-hosted-notes/data/uploads
+  #      path: /home/ojasva/Projects/notes-app/data/uploads
   lock:
     password: ${LOCK_PASSWORD:finalXV}
