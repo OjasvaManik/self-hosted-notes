@@ -27,8 +27,18 @@ const Banner = ( {
 
   if ( !bannerSrc ) {
     return (
-      <div className="flex h-16 w-full items-center justify-center border-b border-border bg-secondary">
-        <UploadFile noteId={ noteId }/>
+      <div className="flex h-16 w-full items-center justify-between border-b border-border bg-secondary group">
+        <div className={ 'ml-4 mb-3' }>
+          <NotePageButtons
+            noteId={ noteId }
+            isLocked={ isLocked }
+            isPinned={ isPinned }
+          />
+        </div>
+        <div
+          className="flex gap-2 transition-opacity duration-200 lg:opacity-0 group-hover:opacity-100">
+          <UploadFile noteId={ noteId }/>
+        </div>
       </div>
     )
   }
