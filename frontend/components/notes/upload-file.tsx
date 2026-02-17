@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { ImagePlus, Link as LinkIcon, Loader2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { updateImgUrlAction } from "@/actions/actions"
+import { toast } from "sonner"
 
 type Props = {
   noteId: string
@@ -33,10 +34,10 @@ const UploadFile = ( { noteId }: Props ) => {
         method: "POST",
         body: formData,
       } )
-
-      if ( !res.ok ) throw new Error( "Failed to upload file" )
-
+      toast.success( "File uploaded successfully" )
       router.refresh()
+    } catch ( error ) {
+      toast.error( "Failed to upload file." )
     } finally {
       setIsPending( false )
       if ( inputRef.current ) inputRef.current.value = ""
@@ -50,7 +51,10 @@ const UploadFile = ( { noteId }: Props ) => {
     try {
       await updateImgUrlAction( noteId, urlInput.trim() )
       setUrlInput( "" )
+      toast.success( "Image URL updated" )
       router.refresh()
+    } catch ( error ) {
+      toast.error( "Failed to update image URL" )
     } finally {
       setIsPending( false )
     }

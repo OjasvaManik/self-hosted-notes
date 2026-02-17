@@ -28,6 +28,21 @@ class NoteService(
 		noteRepo.save(note)
 	}
 
+	fun nullifyFileLocation(id: UUID) {
+		fileService.deleteFile(noteRepo.findById(id).map { it.fileLocation }.orElse(null))
+		noteRepo.findById(id).ifPresent { note ->
+			note.fileLocation = null
+			noteRepo.save(note)
+		}
+	}
+
+	fun nullifyImgUrl(id: UUID) {
+		noteRepo.findById(id).ifPresent { note ->
+			note.imgUrl = null
+			noteRepo.save(note)
+		}
+	}
+
 	fun createNote(): UUID {
 		val note = NoteEntity(
 			title = "Untitled",
@@ -148,7 +163,7 @@ class NoteService(
 		val note = noteRepo.findById(id)
 			.orElseThrow { RuntimeException("Note not found") }
 		if (note.fileLocation != null) {
-			throw IllegalStateException("Note already has an image")
+			nullifyFileLocation(id)
 		}
 		note.imgUrl = imgUrl
 		return noteRepo.save(note)

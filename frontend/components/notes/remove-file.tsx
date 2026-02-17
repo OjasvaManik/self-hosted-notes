@@ -4,6 +4,7 @@ import { useTransition } from "react"
 import { deleteFileAction } from "@/actions/actions"
 import { Button } from "@/components/ui/button"
 import { Loader2, Trash2 } from "lucide-react"
+import { toast } from "sonner"
 
 type Props = {
   noteId: string
@@ -16,8 +17,9 @@ const RemoveFile = ( { noteId }: Props ) => {
     startTransition( async () => {
       try {
         await deleteFileAction( noteId )
+        toast.success( "File removed" )
       } catch ( error ) {
-        console.error( error )
+        toast.error( "Failed to remove file" )
       }
     } )
   }

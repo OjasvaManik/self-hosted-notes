@@ -24,8 +24,7 @@ class FileController(
 			?: return ResponseEntity.notFound().build()
 
 		if (note.imgUrl != null) {
-			return ResponseEntity.badRequest()
-				.body(mapOf("error" to "Note already has an image"))
+			noteService.nullifyImgUrl(noteId)
 		}
 
 		val contentType = file.contentType
@@ -66,6 +65,11 @@ class FileController(
 	fun deleteFile(@RequestBody noteId: UUID): ResponseEntity<Boolean> {
 		val note = noteService.getNote(noteId)
 			?: return ResponseEntity.notFound().build()
+
+		if (note.imgUrl != null) {
+			noteService.nullifyImgUrl(noteId)
+			return ResponseEntity.ok(true)
+		}
 
 		fileService.deleteFile(note.fileLocation)
 		note.fileLocation = null
