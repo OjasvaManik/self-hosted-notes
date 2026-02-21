@@ -33,10 +33,18 @@ const UploadFile = ( { noteId }: Props ) => {
         method: "POST",
         body: formData,
       } )
+
+      if ( !res.ok ) {
+        const errorData = await res.json().catch( () => ( {} ) );
+        throw new Error( errorData.error || `Server error: ${ res.status }` );
+      }
+
       toast.success( "File uploaded successfully" )
       router.refresh()
-    } catch ( error ) {
-      toast.error( "Failed to upload file." )
+    } catch ( error: any ) {
+      // Print to console and display in toast
+      console.error( "File upload exception:", error )
+      toast.error( error.message || "Failed to upload file." )
     } finally {
       setIsPending( false )
       if ( inputRef.current ) inputRef.current.value = ""

@@ -58,7 +58,8 @@ class FileController(
 		} catch (e: Exception) {
 			println("CRITICAL DB SAVE ERROR: ${e.message}")
 			e.printStackTrace()
-			return ResponseEntity.internalServerError().body(mapOf("error" to "Database save failed"))
+			return ResponseEntity.internalServerError()
+				.body(mapOf("error" to (e.message ?: "Unknown database error")))
 		}
 
 		val publicUrl = "/uploads/images/${File(fullPath).name}"
