@@ -52,8 +52,14 @@ class FileController(
 		oldPath?.let {
 			fileService.deleteFile(it)
 		}
-		note.fileLocation = fullPath
-		noteService.save(note)
+		try {
+			note.fileLocation = fullPath
+			noteService.save(note)
+		} catch (e: Exception) {
+			println("CRITICAL DB SAVE ERROR: ${e.message}")
+			e.printStackTrace()
+			return ResponseEntity.internalServerError().body(mapOf("error" to "Database save failed"))
+		}
 
 		val publicUrl = "/uploads/images/${File(fullPath).name}"
 		return ResponseEntity.ok(
