@@ -22,7 +22,7 @@ class WebConfig(
 					.allowedOrigins(
 						"http://localhost:3000",
 						"http://100.90.227.106:3000",
-						"https://lenovo.taildb46c9.ts.net"
+						"https://fedora.taildb46c9.ts.net"
 					)
 					.allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
 					.allowedHeaders("*")
