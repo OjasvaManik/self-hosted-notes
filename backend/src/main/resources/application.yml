@@ -3,9 +3,9 @@ spring:
     name: note-backend
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/notedb}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/note_db}
     username: ${SPRING_DATASOURCE_USERNAME:note_user}
-    password: ${SPRING_DATASOURCE_PASSWORD:password@123}
+    password: ${SPRING_DATASOURCE_PASSWORD:note_password}
 
   jpa:
     show-sql: true
@@ -19,10 +19,13 @@ spring:
       max-file-size: 1GB
       max-request-size: 1GB
 
+  output:
+    ansi:
+      enabled: ALWAYS
 app:
   file:
     storage:
-      path: /home/ojasva/Prod/self-hosted-notes/data/uploads
-  #      path: /home/ojasva/Projects/notes-app/data/uploads
+      path: /home/ojasva/Prod/self-hosted-notes/uploads
+      #path: /home/ojasva/Projects/self-hosted-notes/uploads
   lock:
     password: ${LOCK_PASSWORD:finalXV}
